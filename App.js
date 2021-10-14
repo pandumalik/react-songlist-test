@@ -65,19 +65,21 @@ const SongListScreen = (props) => {
 
   const fetchResults = () => {
     dataContext.clearData();
-    fetch(`${API_URL}${state.searchKeyword.replace(/\s/g, '+')}`, {
-      method: 'GET',
-    }).then((result) => {
-      result.json().then((res) => {
-        setState((prevState) => {
-          return {
-            ...prevState,
-            result: res.results,
-          };
+    if (state.searchKeyword) {
+      fetch(`${API_URL}${state.searchKeyword.replace(/\s/g, '+')}`, {
+        method: 'GET',
+      }).then((result) => {
+        result.json().then((res) => {
+          setState((prevState) => {
+            return {
+              ...prevState,
+              result: res.results,
+            };
+          });
+          dataContext.setSongData(res.results);
         });
-        dataContext.setSongData(res.results);
       });
-    });
+    }
   };
 
   const isInFavorites = (songData) => {
